@@ -12,13 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Chatting_video"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Home"></activity>
+        <activity
+            android:name=".Home"
+            android:exported="true" />
         <activity android:name=".SignUp" />
-        <activity android:name=".SignIn" />
-        <activity android:name=".HomeActivity" />
+        <activity android:name=".SignIn" /> <!-- <activity android:name=".HomeActivity" /> -->
         <activity android:name=".SplashActivity" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
