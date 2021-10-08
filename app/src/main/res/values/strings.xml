@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">chatting_video</string>
+    <string name="facebook_app_id">189145870024133</string>
+    <string name="fb_login_protocol_scheme">fb189145870024133</string>
+
 </resources>

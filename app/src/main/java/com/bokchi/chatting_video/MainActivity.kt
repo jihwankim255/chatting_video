@@ -4,10 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.bokchi.chatting_video.databinding.ActivityMainBinding
+import com.facebook.AccessToken
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
@@ -15,7 +22,10 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
 
+
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding : ActivityMainBinding
 
     companion object {
         private const val RC_SIGN_IN = 9001
@@ -24,6 +34,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth;
 
     private lateinit var googleSignInClient:GoogleSignInClient
+
+    var callbackManager: CallbackManager? = null
 
     override fun onStart() {
         super.onStart()
@@ -35,10 +47,12 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         auth = Firebase.auth
 
         btn_SignIn.setOnClickListener {
@@ -61,8 +75,52 @@ class MainActivity : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         btn_google_sign_in.setOnClickListener {
-            signIn()
+            googleSignIn()
         }
+
+
+
+        callbackManager = CallbackManager.Factory.create();
+
+        btn_facebook_sign_in.setReadPermissions("email")
+        btn_facebook_sign_in.setOnClickListener {
+            facebookSignIn()
+        }
+
+    }
+
+
+    private fun facebookSignIn() {
+        btn_facebook_sign_in.registerCallback(callbackManager, object :
+            FacebookCallback<LoginResult> {
+            override fun onSuccess(loginResult: LoginResult) {
+                handleFacebookAccessToken(loginResult.accessToken)
+            }
+            override fun onCancel() {
+
+            }
+
+            override fun onError(error: FacebookException) {
+
+            }
+        })
+    }
+
+    private fun handleFacebookAccessToken(accessToken: AccessToken?) {
+        val credential = FacebookAuthProvider.getCredential(accessToken!!.token)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    val user = auth.currentUser
+                    Toast.makeText(baseContext, "You logged in with ."+user,
+                        Toast.LENGTH_SHORT).show()
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Toast.makeText(baseContext, "Authentication failed.",
+                        Toast.LENGTH_SHORT).show()
+                }
+            }
 
     }
 
@@ -84,7 +142,7 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
-    private fun signIn() {
+    private fun googleSignIn() {
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
