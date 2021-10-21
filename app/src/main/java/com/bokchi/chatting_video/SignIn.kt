@@ -9,6 +9,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_sign_in.*
 
+
 class SignIn : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth;
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,6 +25,10 @@ class SignIn : AppCompatActivity() {
                         // Sign in success, update UI with the signed-in user's information
                         Toast.makeText(baseContext, "SignIn Done.",
                             Toast.LENGTH_LONG).show()
+
+                        // 데이터베이스에서 유저 정보 넣어줘야 합니다.
+                        val adapter = GroupieAdapter()
+                        recyclerView.setAdapter(adapter)
 
                         val intent = Intent(this, Home::class.java)
                         startActivity(intent)

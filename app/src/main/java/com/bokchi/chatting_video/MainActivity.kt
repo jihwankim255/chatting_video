@@ -5,10 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bokchi.chatting_video.databinding.ActivityMainBinding
-import com.facebook.AccessToken
-import com.facebook.CallbackManager
-import com.facebook.FacebookCallback
-import com.facebook.FacebookException
+import com.facebook.*
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -21,7 +18,6 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -55,6 +51,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         auth = Firebase.auth
 
+        FacebookSdk.sdkInitialize(getApplicationContext());
+
+
         btn_SignIn.setOnClickListener {
             val intent = Intent(this, SignIn::class.java)
             startActivity(intent)
@@ -79,7 +78,6 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-
         callbackManager = CallbackManager.Factory.create();
 
         btn_facebook_sign_in.setReadPermissions("email")
@@ -94,7 +92,9 @@ class MainActivity : AppCompatActivity() {
         btn_facebook_sign_in.registerCallback(callbackManager, object :
             FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
-                handleFacebookAccessToken(loginResult.accessToken)
+                handleFacebookAccessToken(loginResult!!.accessToken)
+                val user = auth.currentUser
+                updateUI(user)
             }
             override fun onCancel() {
 
@@ -107,8 +107,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleFacebookAccessToken(accessToken: AccessToken?) {
-        val credential = FacebookAuthProvider.getCredential(accessToken!!.token)
-        auth.signInWithCredential(credential)
+        val credentials = FacebookAuthProvider.getCredential(accessToken!!.token)
+        auth.signInWithCredential(credentials)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
@@ -149,7 +149,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
+        callbackManager?.onActivityResult(requestCode,resultCode,data)
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
@@ -170,6 +170,12 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun updateUI(user:FirebaseUser?) {
+        if (user != null) {
+            val intent = Intent(this, Home::class.java)
+            startActivity(intent)
+        } else {
+            Toast.makeText(this, "Please sign in to continue.",Toast.LENGTH_LONG).show();
+        }
 
     }
 

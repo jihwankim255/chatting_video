@@ -5,6 +5,9 @@ plugins {
     id 'kotlin-android-extensions'
     id 'com.google.gms.google-services'
 }
+androidExtensions {
+    experimental = true
+}
 
 android {
     compileSdkVersion 31
@@ -18,6 +21,7 @@ android {
         versionName "1.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -54,4 +58,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx:21.0.1'
     implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
+    implementation 'com.google.firebase:firebase-firestore-ktx'
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation "com.github.lisawray.groupie:groupie:2.10.0"
+    implementation "com.github.lisawray.groupie:groupie-viewbinding:2.10.0"
+    implementation "com.github.lisawray.groupie:groupie-databinding:2.10.0"
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+
 }
