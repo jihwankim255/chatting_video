@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         val currentUser = auth.currentUser
         if (currentUser != null){
-            val intent = Intent(this, Home::class.java)
+            val intent = Intent(this, ChatList::class.java)
             startActivity(intent)
         }
 
@@ -158,7 +158,7 @@ class MainActivity : AppCompatActivity() {
                 val account = task.getResult(ApiException::class.java)!!
                 Toast.makeText(this,"firebaseAuthWithGoogle:" + account.id,Toast.LENGTH_LONG).show()
                 firebaseAuthWithGoogle(account.idToken!!)
-                val intent = Intent(this, Home::class.java)
+                val intent = Intent(this, ChatList::class.java)
                 startActivity(intent)
 
             } catch (e: ApiException) {
@@ -171,7 +171,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateUI(user:FirebaseUser?) {
         if (user != null) {
-            val intent = Intent(this, Home::class.java)
+            val intent = Intent(this, ChatList::class.java)
             startActivity(intent)
         } else {
             Toast.makeText(this, "Please sign in to continue.",Toast.LENGTH_LONG).show();

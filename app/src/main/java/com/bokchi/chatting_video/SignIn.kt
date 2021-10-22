@@ -27,10 +27,9 @@ class SignIn : AppCompatActivity() {
                             Toast.LENGTH_LONG).show()
 
                         // 데이터베이스에서 유저 정보 넣어줘야 합니다.
-                        val adapter = GroupieAdapter()
-                        recyclerView.setAdapter(adapter)
 
-                        val intent = Intent(this, Home::class.java)
+
+                        val intent = Intent(this, ChatList::class.java)
                         startActivity(intent)
 
                     } else {

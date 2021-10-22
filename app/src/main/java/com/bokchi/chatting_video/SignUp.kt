@@ -45,7 +45,7 @@ class SignUp : AppCompatActivity() {
                                 Log.d(TAG, "데이터베이스 실패")
                             }
 
-                        val intent = Intent(this, Home::class.java)
+                        val intent = Intent(this, ChatList::class.java)
                         startActivity(intent)
 
                     } else {
