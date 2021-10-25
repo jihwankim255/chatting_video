@@ -45,6 +45,12 @@ class ChatList : AppCompatActivity() {
                 Log.w(TAG, "Error getting documents.", exception)
             }
 
+        adapter.setOnItemClickListener { item, view ->
+
+            val intent = Intent(this, ChatROomActivity::class.java)
+            startActivity(intent)
+        }
+
 
     }
 
