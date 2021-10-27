@@ -32,7 +32,7 @@ class SignUp : AppCompatActivity() {
 
                         val uid = FirebaseAuth.getInstance().uid?:""
 
-                        val user = User(uid)
+                        val user = User( uid, username.text.toString() )
 
                         // 여기에서 데이터베이스에 넣음
                         val db = Firebase.firestore.collection("users")

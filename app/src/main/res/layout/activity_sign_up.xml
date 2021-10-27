@@ -35,17 +35,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btnSignUp"
-        android:layout_alignStart="@+id/btnSignUp"
-        android:layout_alignEnd="@+id/btnSignUp"
         android:layout_marginBottom="136dp"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@+id/btnSignUp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnSignUp"
         android:layout_alignLeft="@+id/btnSignUp"
-        android:layout_alignRight="@+id/btnSignUp" />
+        android:layout_alignRight="@+id/btnSignUp"
+        android:ems="10"
+        android:hint="username"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/btnSignUp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Pass_SignUp" />
 
     <Button
         android:id="@+id/btnSignUp"

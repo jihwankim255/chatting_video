@@ -6,7 +6,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import com.bokchi.chatting_video.Model.UserItem
+import com.bokchi.chatting_video.Adapter.UserItem
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -26,17 +26,19 @@ class ChatList : AppCompatActivity() {
         setContentView(R.layout.activity_chat_list)
         auth = Firebase.auth
 
+        myChatList.setOnClickListener {
+            val intent = Intent(this, MyRoomActivity::class.java)
+            startActivity(intent)
+        }
+
         val adapter = GroupAdapter<GroupieViewHolder>()
-
-
-        recyclerview_list.adapter = adapter
 
         db.collection("users")
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
-                    adapter.add(UserItem(document.get("uid").toString()))
-                    Log.d(TAG, document.get("uid").toString())
+                    adapter.add(UserItem(document.get("username").toString(), document.get("uid").toString()))
+                    Log.d(TAG, document.get("username").toString())
                     Log.d(TAG, "${document.id} => ${document.data}")
                 }
                 recyclerview_list.adapter = adapter
@@ -47,7 +49,12 @@ class ChatList : AppCompatActivity() {
 
         adapter.setOnItemClickListener { item, view ->
 
+            val uid = (item as UserItem).uid
+            val name = (item as UserItem).name
+
             val intent = Intent(this, ChatROomActivity::class.java)
+            intent.putExtra("yourUid", uid)
+            intent.putExtra("name", name)
             startActivity(intent)
         }
 
